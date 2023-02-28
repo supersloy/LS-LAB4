@@ -8,12 +8,12 @@ type History = {
   requests: { time: Date }[];
 };
 const app: Express = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8080;
 
 async function updateHistory() {
   const now = new Date();
   const history: History = await fs
-    .readJSON("./dist/data/history.json")
+    .readJSON("./data/history.json")
     .catch((e) => console.log(e));
   history.requests.push({ time: now });
   fs.writeJson("./data/history.json", history, (err) => {
@@ -38,7 +38,7 @@ app.get("/cats", async (req: Request, res: Response) => {
   const headers = new Headers({ "x-api-key": api_key });
   let response = await fetch(url, { method: "GET", headers: headers }).then(
     (res) => res.json()
-  );
+  ).catch((err)=> console.log(err));
   await updateHistory();
 
   res.send(response);
