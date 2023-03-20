@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: praqma
+spec:
+  volumes:
+    - name: pvc-721dc6b0-e35e-4fdf-98dc-efe4f95901d5
+      persistentVolumeClaim:
+        claimName: data-lslab4-sts-4
+  containers:
+   - image: praqma/network-multitool
+     name: praqma
+     volumeMounts:
+       - mountPath: /mnt
+         name: pvc-721dc6b0-e35e-4fdf-98dc-efe4f95901d5

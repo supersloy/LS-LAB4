@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: firstnsdeployment
+  namespace: ns1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: lslab4
+  template:
+    metadata:
+      labels:
+        app: lslab4
+    spec:
+      containers:
+        - name: app
+          image: supersloy/lslab4:latest

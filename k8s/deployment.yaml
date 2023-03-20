@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: supersloy/lslab4
+          image: supersloy/lslab4:latest
           env:
           - name: CATS
             valueFrom:
@@ -36,7 +36,7 @@ spec:
                 key: API_KEY
           volumeMounts:
             - name: data
-              mountPath: ./data
+              mountPath: /usr/src/app/data
           ports:
             - containerPort: 8080
       volumes:

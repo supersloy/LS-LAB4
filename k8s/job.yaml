@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: visit-cats
+spec:
+  template:
+    metadata:
+      name: visit-cats
+    spec:
+      containers:
+      - name: busybox-ping
+        image: busybox
+        args: ["ping", "127.0.0.1:8080/cats"]
+      restartPolicy: Never

@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 metadata:
   name: lslab4-pvc
 spec:
-  storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:
