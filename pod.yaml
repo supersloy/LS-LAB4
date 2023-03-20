@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lslab4
+  labels:
+    app: lslab4
+spec:
+  containers:
+  - name: lslab4
+    image: supersloy/lslab4
+    ports:
+        - containerPort: 8080

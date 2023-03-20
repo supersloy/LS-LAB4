@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lslab4-deployment
+  labels:
+    app: lslab4
+spec:
+  replicas: 3
+  revisionHistoryLimit: 100
+  selector:
+    matchLabels:
+      app: lslab4
+  template:
+    metadata:
+      labels:
+        app: lslab4
+    spec:
+      containers:
+        - name: app
+          image: supersloy/lslab4
+          env:
+          - name: CATS
+            valueFrom:
+              configMapKeyRef:
+                name: lslab4-configmap
+                key: CATS
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lslab4-configmap
+                key: PORT
+          - name: API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: lslab4-secret
+                key: API_KEY
+          volumeMounts:
+            - name: data
+              mountPath: ./data
+          ports:
+            - containerPort: 8080
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: lslab4-pvc

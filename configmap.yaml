@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lslab4-configmap
+data:
+  CATS: "50"
+  PORT: "8080"

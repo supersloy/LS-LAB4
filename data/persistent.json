@@ -1,5 +1,0 @@
-{
-  "name": "persistentData",
-  "meta": "persistent",
-  "description": "Some persisent information that is being hosted on '/persistent' endpoint. Used in persistent volume."
-}

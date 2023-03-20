@@ -7,16 +7,26 @@ dotenv.config();
 type History = {
   requests: { time: Date }[];
 };
+
 const app: Express = express();
 const port = process.env.PORT || 8080;
+const HISTORY_PATH = "./data/history.json";
 
 async function updateHistory() {
   const now = new Date();
+  // If file does not exist
+  await fs.ensureFile(HISTORY_PATH);
+  const data = await fs.readFile(HISTORY_PATH, "utf8");
+  if (data === "")
+    await fs.writeJson(HISTORY_PATH, {
+      requests: [],
+    });
+
   const history: History = await fs
-    .readJSON("./data/history.json")
+    .readJSON(HISTORY_PATH)
     .catch((e) => console.log(e));
   history.requests.push({ time: now });
-  fs.writeJson("./data/history.json", history, (err) => {
+  fs.writeJson(HISTORY_PATH, history, (err) => {
     if (err) return console.error(err);
     console.log("History updated");
   });
@@ -24,21 +34,18 @@ async function updateHistory() {
 
 app.get("/", async (req: Request, res: Response) => {
   await updateHistory();
-  res.send(
-    "HELLO\n There are different endpoints: \n/cats \n/history \npersistent"
-  );
+  res.send("HELLO\n There are different endpoints: \n/cats \n/history");
 });
 
 app.get("/cats", async (req: Request, res: Response) => {
   const url = `https://api.thecatapi.com/v1/images/search?limit=${
-    process.env.CATS || 5
+    process.env.CATS || "5"
   }`;
-  const api_key =
-    "live_KtwzGVvDOb0rXC8qjaBMwAWjZBB9MXeoExVND18gzVPSLky2ZhSSo1slBxAgJ7Cu";
+  const api_key = process.env.API_KEY || "";
   const headers = new Headers({ "x-api-key": api_key });
-  let response = await fetch(url, { method: "GET", headers: headers }).then(
-    (res) => res.json()
-  ).catch((err)=> console.log(err));
+  let response = await fetch(url, { method: "GET", headers: headers })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
   await updateHistory();
 
   res.send(response);
@@ -52,14 +59,6 @@ app.get("/history", async (req: Request, res: Response) => {
   res.send(history);
 });
 
-app.get("/persistent", async (req: Request, res: Response) => {
-  await updateHistory();
-  const persistentInfo = await fs
-    .readJSON("./data/persistent.json")
-    .catch((e) => console.log(e));
-  res.send(persistentInfo);
-});
-
 app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://HOST:${port}`);
+  console.log(`⚡️[server]: Server is running with port: ${port}`);
 });
